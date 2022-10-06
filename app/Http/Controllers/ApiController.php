@@ -16,11 +16,18 @@ class ApiController extends Controller
             $body = json_decode($input,true);
             if(isset($body['link']) and !empty($body['link'])){
                 try{
-                    $short_link = ShortURL::destinationUrl($body['link'])->make();
-                    Link::create(['short_link'=>$short_link->url_key,'long_link'=>$body['link']]);
-                    $result = env('APP_URL') . '/' . $short_link->url_key;
-                    $res['result'] = true;
-                    $res['shortLink'] = $result;
+                    $links = Link::select()->where('long_link','=',$body['link'])->get();
+                    if(count($links)){
+                        $res['result'] = true;
+                        $result = env('APP_URL') . '/' . $links[0]->short_link;
+                        $res['shortLink'] = $result;
+                    }else{
+                        $short_link = ShortURL::destinationUrl($body['link'])->make();
+                        Link::create(['short_link'=>$short_link->url_key,'long_link'=>$body['link']]);
+                        $result = env('APP_URL') . '/' . $short_link->url_key;
+                        $res['result'] = true;
+                        $res['shortLink'] = $result;
+                    }
                 } catch (QueryException $qe){
                     $res['result'] = false;
                     $res['error'] = 'Помилка додавання у базу';
