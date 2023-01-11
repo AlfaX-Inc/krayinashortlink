@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [\App\Http\Controllers\LinkController::class,'index']);
-Route::post('/generate',[\App\Http\Controllers\LinkController::class,'generate'])->name('generate_link');
-Route::get('/{short_url}',[\App\Http\Controllers\LinkController::class,'redirect']);
+//Route::post('/generate',[\App\Http\Controllers\LinkController::class,'generate'])->name('generate_link');
+//Route::get('/{short_url}',[\App\Http\Controllers\LinkController::class,'redirect']);
 
-Route::post('/api/getlink',[\App\Http\Controllers\API\v1\LinkController::class,'getlink']);
+//Route::post('/api/getlink',[\App\Http\Controllers\API\v1\LinkController::class,'getlink']);
