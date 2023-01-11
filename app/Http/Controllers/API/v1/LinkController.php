@@ -1,14 +1,34 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API\v1;
 
+use App\Http\Controllers\Controller;
 use App\Models\Link;
+use AshAllenDesign\ShortURL\Exceptions\ShortURLException;
 use AshAllenDesign\ShortURL\Facades\ShortURL;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
-class ApiController extends Controller
+class LinkController extends BaseController
 {
+    public function store(Request $request){
+        $input = $request->input();
+        $validator = Validator::make($request->all(),[
+            'destination' => 'required'
+        ]);
+
+        if($validator->fails()){
+            return $this->sendError($validator->errors(),[],400);
+        }
+
+        try{
+            $shortURL = ShortURL::destinationUrl($input['destination'])->make()->default_short_url;
+            return $this->sendResponse($shortURL,'ShortURL successfully created.');
+        } catch (ShortURLException $e){
+            return $this->sendError($e->getMessage(),[],400);
+        }
+    }
     public function getlink(){
         $input = file_get_contents('php://input');
 
