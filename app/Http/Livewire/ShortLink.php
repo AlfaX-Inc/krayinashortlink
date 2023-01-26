@@ -41,7 +41,7 @@ class ShortLink extends Component
         $this->error = '';
 
         try {
-            $shortObject = ShortURL::destinationUrl($this->destination);
+            $shortObject = ShortURL::destinationUrl($this->destination)->redirectStatusCode(302);
 
             if ($this->singleUse) {
                 $shortObject = $shortObject->singleUse();
