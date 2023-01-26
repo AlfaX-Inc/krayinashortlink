@@ -23,7 +23,7 @@ class LinkController extends BaseController
         }
 
         try{
-            $shortURL = ShortURL::destinationUrl($input['destination'])->make()->default_short_url;
+            $shortURL = ShortURL::destinationUrl($input['destination'])->redirectStatusCode(302)->make()->default_short_url;
             return $this->sendResponse($shortURL,'ShortURL successfully created.');
         } catch (ShortURLException $e){
             return $this->sendError($e->getMessage(),[],400);
@@ -57,5 +57,9 @@ class LinkController extends BaseController
 
             }
         }
+    }
+
+    public function test(){
+
     }
 }
